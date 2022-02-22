@@ -1,6 +1,6 @@
 # Create your first NFT game.
 
-![](https://i.imgur.com/cNZxLk5.png)
+![](https://i.imgur.com/7MVVWlV.png)
 
 このコースを始めるには、下記のステップを実行してください。
 
