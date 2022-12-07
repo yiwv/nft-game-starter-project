@@ -15,8 +15,8 @@ const App = () => {
           <p className="sub-text">プレイヤーと協力してボスを倒そう✨</p>
           <div className="connect-wallet-container">
             <img
-              src="https://i.imgur.com/yMocj5x.png"
-              alt="Pickachu"
+              src="https://i.imgur.com/TXBQ4cC.png"
+              alt="LUFFY"
             />
           </div>
         </div>
