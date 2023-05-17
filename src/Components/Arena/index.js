@@ -15,6 +15,9 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
   // ボスのメタデータを保存する状態変数を初期化します。
   const [boss, setBoss] = useState(null);
 
+  // 他のプレイヤーを保存する状態変数を初期化します。
+  const [activePlayers, setActivePlayers] = useState([]);
+
   // 攻撃の状態を保存する変数を初期化します。
   const [attackState, setAttackState] = useState("");
 
@@ -63,6 +66,15 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
       setBoss(transformCharacterData(bossTxn));
     };
 
+    // 他のプレヤーのデータをコントラクトから読み込む関数を設定します。
+    const fetchActivePlayers = async () => {
+      //ボスのメタデータをコントラクトをから呼び出します。
+      const allPlayersTxn = await gameContract.getAllPlayers();
+      console.log("Players:", allPlayersTxn);
+      // ボスの状態を設定します。
+      setActivePlayers(allPlayersTxn.map(playerTxn => transformCharacterData(playerTxn)));
+    };
+
     // AttackCompleteイベントを受信したときに起動するコールバックメソッドを追加します。
     const onAttackComplete = (newBossHp, newPlayerHp) => {
       // ボスの新しいHPを取得します。
@@ -85,12 +97,19 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
       fetchBoss();
       // リスナーの設定：ボスが攻撃された通知を受け取ります。
       gameContract.on("AttackComplete", onAttackComplete);
+
+      // 他のプレイヤーを取得します。
+      fetchActivePlayers();
+      // リスナーの設定：他のプレイヤーがMintしたとき通知を受け取ります。
+      // gameContract.on("CharacterNFTMinted", fetchActivePlayers);
     }
 
     // コンポーネントがマウントされたら、リスナーを停止する。
     return () => {
       if (gameContract) {
         gameContract.off("AttackComplete", onAttackComplete);
+
+        // gameContract.off("CharacterNFTMinted", fetchActivePlayers);
       }
     };
   }, [gameContract]);
@@ -111,6 +130,26 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
       console.log("Ethereum object not found");
     }
   }, []);
+
+  const renderActivePlayersList = () => {
+    return (
+      <div className="active-players-list">
+        {activePlayers.map((player, idx) => (
+          <div key={idx} className="active-player">
+            <div className="active-player-image">
+              <img src={`https://cloudflare-ipfs.com/ipfs/${player.imageURI}`} alt={`Character ${player.name}`} />
+            </div>
+            <div className="active-player-info">
+              <div className="active-player-name">{player.name}</div>
+              <div className="active-player-hp">
+                HP: {player.hp} / {player.maxHp}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="arena-container">
@@ -169,10 +208,10 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
               </div>
             </div>
           </div>
-          {/* <div className="active-players">
+          <div className="active-players">
             <h2>Active Players</h2>
             <div className="players-list">{renderActivePlayersList()}</div>
-          </div> */}
+          </div>
         </div>
       )}
     </div>

@@ -344,3 +344,35 @@
     opacity: 0;
   }
 }
+
+.active-players-list {
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 10px;
+  background-image: linear-gradient( to right, #2b2ab1 100%, #3c55cf 78%, #4f8cff 21%, #5591f9 52%, #3c55cf 78%, #2b2ab1 100% );
+  background-size: 600% 600%;
+  animation: gradient-animation 8s ease infinite;
+}
+.active-player {
+  display: flex;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background-color: gray;
+  height: 60px;
+}
+.active-player-image img {
+  width: 60px;
+}
+.active-player-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+.active-player-name {
+  font-weight: bold;
+}
